@@ -5,6 +5,7 @@ import ToastProvider from "@/components/toast/ToastProvider";
 import "./globals.css";
 import Header from "@/layouts/header/Header";
 import NavigationEvents from "@/components/navigation/NavigationEvents";
+import Loader from "@/components/loader/Loader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,7 @@ export default function RootLayout({
         <Header />
         {children}
 
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loader />}>
           <NavigationEvents />
         </Suspense>
       </body>
