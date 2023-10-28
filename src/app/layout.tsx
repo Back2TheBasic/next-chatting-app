@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import ToastProvider from "@/components/toast/ToastProvider";
 import "./globals.css";
+import Header from "@/layouts/header/Header";
+import NavigationEvents from "@/components/navigation/NavigationEvents";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    // TODO: Loading을 여기에서 관리하는 방법!!
     <html lang="ko">
       <body className={inter.className}>
         <ToastProvider />
+        <Header />
         {children}
+
+        <Suspense fallback={null}>
+          <NavigationEvents />
+        </Suspense>
       </body>
     </html>
   );
