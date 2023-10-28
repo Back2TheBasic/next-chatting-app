@@ -21,7 +21,7 @@ const LoginClient = () => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
 
-  const handleSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!loginInfo.email || !loginInfo.password) {
@@ -62,10 +62,13 @@ const LoginClient = () => {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
+        // TODO: 중복되는 함수 처리
         toast.success("로그인에 성공했습니다.");
         router.push("/");
       })
       .catch((error) => {
+        // TODO: 함수 빼서 간단하게 처리
+        // firebase에 오류 기록하는 기능이 있는데 이걸 활용한다면 따로 함수 만들어서!!
         setIsLoading(false);
         // Handle Errors here.
         const errorCode = error.code;
@@ -91,7 +94,7 @@ const LoginClient = () => {
         </div>
 
         <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSignIn} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div className="mt-2">
               <Input
                 id="email"
