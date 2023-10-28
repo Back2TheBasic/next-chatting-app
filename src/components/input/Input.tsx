@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import Icon from "../icon/Icon";
+import styles from "./Input.module.scss";
 
 const Input = ({
   id = "",
@@ -9,6 +11,17 @@ const Input = ({
   onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {},
   required = false,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const checkType = (): string => {
+    if (type === "email") return "email";
+    if (type === "password") return showPassword ? "text" : "password";
+    return "text";
+  };
+  const togglePasswordShow = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
       <label
@@ -17,17 +30,23 @@ const Input = ({
       >
         {label}
       </label>
-      <div className="mt-2">
+      <div className={styles.inputWrapper}>
         <input
-          type={type}
+          type={checkType()}
           name={id}
           id={id}
-          placeholder="이메일을 입력하세요"
+          placeholder={placeholder}
           onChange={onChange}
-          autoComplete="email"
-          required
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink sm:text-sm sm:leading-6"
+          autoComplete={autoComplete}
+          required={required}
+          className={styles.input}
         />
+
+        {type === "password" && (
+          <button type="button" onClick={togglePasswordShow}>
+            <Icon type={showPassword ? "show" : "hide"} />
+          </button>
+        )}
       </div>
     </>
   );
