@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/firebase/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import Loader from "@/components/loader/Loader";
+import { toast } from "react-toastify";
 import Input from "@/components/input/Input";
 import { emailValidation } from "@/utils/validation";
 
@@ -20,9 +20,10 @@ const LoginClient = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(false);
+  // TODO: 불필요한 상태 삭제
+  // const emailValidation = emailValidation(signUpInfo.email)
 
   const changeSignUpInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: onchange될 때 이메일 유효성 검사!!
     setSignUpInfo({ ...signUpInfo, [e.target.name]: e.target.value });
 
     if (e.target.name !== "email") return;

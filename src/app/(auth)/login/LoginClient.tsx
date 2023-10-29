@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "react-toastify";
 import { auth } from "@/firebase/firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
-import { toast } from "react-toastify";
 import Loader from "@/components/loader/Loader";
 import Input from "@/components/input/Input";
 
@@ -34,9 +34,7 @@ const LoginClient = () => {
     signInWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
       .then((userCredential) => {
         setIsLoading(false);
-
-        const user = userCredential.user;
-
+        // const user = userCredential.user;
         toast.success("로그인에 성공했습니다.");
         router.push("/");
       })
@@ -56,27 +54,19 @@ const LoginClient = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         setIsLoading(false);
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
         // TODO: 중복되는 함수 처리
         toast.success("로그인에 성공했습니다.");
         router.push("/");
       })
       .catch((error) => {
         // TODO: 함수 빼서 간단하게 처리
-        // firebase에 오류 기록하는 기능이 있는데 이걸 활용한다면 따로 함수 만들어서!!
+        // firebase에 오류 기록하는 기능이 있는데 추후 이걸 활용한다면 따로 함수 만들어서!!
         setIsLoading(false);
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        // const email = error.customData.email;
+        // const credential = GoogleAuthProvider.credentialFromError(error);
         console.log("errorCode", errorCode, "errorMessage", errorMessage);
         toast.error(errorMessage);
       });
