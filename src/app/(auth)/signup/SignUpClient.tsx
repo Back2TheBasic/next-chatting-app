@@ -19,16 +19,9 @@ const LoginClient = () => {
     passwordConfirm: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  // TODO: 불필요한 상태 삭제
-  // const emailValidation = emailValidation(signUpInfo.email)
 
   const changeSignUpInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpInfo({ ...signUpInfo, [e.target.name]: e.target.value });
-
-    if (e.target.name !== "email") return;
-    if (emailValidation(e.target.value)) setIsEmailValid(true);
-    else setIsEmailValid(false);
   };
 
   const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
@@ -95,11 +88,12 @@ const LoginClient = () => {
                 autoComplete="email"
                 required
               />
-              {signUpInfo.email !== "" && !isEmailValid && (
-                <p className="block text-sm m-1 font-medium leading-6 text-red-500">
-                  이메일 형식을 확인해주세요
-                </p>
-              )}
+              {signUpInfo.email !== "" &&
+                !emailValidation(signUpInfo.email) && (
+                  <p className="block text-sm m-1 font-medium leading-6 text-red-500">
+                    이메일 형식을 확인해주세요
+                  </p>
+                )}
             </div>
 
             <div className="mt-2">
