@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 
 import hideIcon from "./icons/shape=hide.svg";
 import showIcon from "./icons/shape=show.svg";
@@ -17,7 +16,7 @@ const Icon = ({ type = "", alt = "" }) => {
       throw new Error("지원하는 아이콘이 아닙니다");
   }
 
-  return <Image src={src} alt={alt} width={40} height={40} />;
+  return <Image src={src} alt={alt} height={40} />;
 };
 
 export default Icon;

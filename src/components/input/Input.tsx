@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Icon from "../icon/Icon";
 import styles from "./Input.module.scss";
 
