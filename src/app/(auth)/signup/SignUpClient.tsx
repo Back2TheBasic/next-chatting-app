@@ -55,21 +55,20 @@ const LoginClient = () => {
 
     createUserWithEmailAndPassword(auth, signUpInfo.email, signUpInfo.password)
       .then((userCredential) => {
-        setIsLoading(false);
-
         const user = userCredential.user;
 
         toast.success("회원가입에 성공했습니다.");
         router.push("/");
       })
       .catch((error) => {
-        setIsLoading(false);
-
         const errorCode = error.code;
         const errorMessage = error.message;
 
         console.log("errorCode", errorCode, "errorMessage", errorMessage);
         toast.error(errorMessage);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 

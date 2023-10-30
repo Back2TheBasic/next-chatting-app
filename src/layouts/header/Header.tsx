@@ -18,19 +18,18 @@ const Header = () => {
 
     signOut(auth)
       .then(() => {
-        setIsLoading(false);
-
         toast.success("로그아웃에 성공했습니다.");
         router.push("/login");
       })
       .catch((error) => {
-        setIsLoading(false);
-
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
 
         toast.error(errorMessage);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 

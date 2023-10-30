@@ -33,19 +33,18 @@ const LoginClient = () => {
 
     signInWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
       .then((userCredential) => {
-        setIsLoading(false);
-        // const user = userCredential.user;
         toast.success("로그인에 성공했습니다.");
         router.push("/");
       })
       .catch((error) => {
-        setIsLoading(false);
-
         const errorCode = error.code;
         const errorMessage = error.message;
 
         console.log("errorCode", errorCode, "errorMessage", errorMessage);
         toast.error(errorMessage);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
   const handleGoogleSignIn = () => {
@@ -53,7 +52,6 @@ const LoginClient = () => {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        setIsLoading(false);
         // const credential = GoogleAuthProvider.credentialFromResult(result);
         // TODO: 중복되는 함수 처리
         toast.success("로그인에 성공했습니다.");
@@ -62,13 +60,15 @@ const LoginClient = () => {
       .catch((error) => {
         // TODO: 함수 빼서 간단하게 처리
         // firebase에 오류 기록하는 기능이 있는데 추후 이걸 활용한다면 따로 함수 만들어서!!
-        setIsLoading(false);
         const errorCode = error.code;
         const errorMessage = error.message;
         // const email = error.customData.email;
         // const credential = GoogleAuthProvider.credentialFromError(error);
         console.log("errorCode", errorCode, "errorMessage", errorMessage);
         toast.error(errorMessage);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
