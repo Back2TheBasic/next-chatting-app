@@ -24,7 +24,6 @@ export default function RootLayout({
     <html lang="ko">
       <body className={inter.className}>
         <ToastProvider />
-        <Header />
         {children}
 
         <Suspense fallback={<Loader />}>
