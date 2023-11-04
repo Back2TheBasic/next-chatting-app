@@ -1,3 +1,5 @@
-export default function Home() {
-  return <main>홈</main>;
+import ChattingClient from "./chatting/ChattingClient";
+
+export default function Chatting() {
+  return <ChattingClient />;
 }
