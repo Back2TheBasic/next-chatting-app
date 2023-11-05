@@ -86,6 +86,7 @@ const LoginForm = () => {
           <label htmlFor="password">비밀번호</label>
           <input
             id="password"
+            type="password"
             placeholder="비밀번호를 입력하세요"
             value={password}
             onChange={onChangePassword}

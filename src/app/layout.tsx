@@ -25,10 +25,8 @@ export default function RootLayout({
       <body className={inter.className}>
         <RecoilRootProvider>
           <Auth>
-            <Layout>
-              {children}
-              <ToastContainer />
-            </Layout>
+            {children}
+            <ToastContainer />
           </Auth>
         </RecoilRootProvider>
       </body>

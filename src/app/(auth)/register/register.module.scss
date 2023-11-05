@@ -46,22 +46,3 @@
   }
 }
 
-.passwordInput {
-  position: relative;
-
-  .passwordIcon {
-    position: absolute;
-    font-size: 2rem;
-    bottom: 1.2rem;
-    right: 10px;
-    cursor: pointer;
-  }
-}
-
-.errorMessage {
-  font-size: 1.2rem;
-  color: red;
-  position: absolute;
-  left: 0;
-  bottom: -20px;
-}
