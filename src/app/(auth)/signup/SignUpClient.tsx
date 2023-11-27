@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { auth } from "@/firebase/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/loader/Loader";
 import { toast } from "react-toastify";
@@ -49,6 +49,11 @@ const LoginClient = () => {
     createUserWithEmailAndPassword(auth, signUpInfo.email, signUpInfo.password)
       .then((userCredential) => {
         const user = userCredential.user;
+        console.log(user);
+
+        updateProfile(user, {
+          displayName: user.displayName,
+        });
 
         toast.success("회원가입에 성공했습니다.");
         router.push("/");
