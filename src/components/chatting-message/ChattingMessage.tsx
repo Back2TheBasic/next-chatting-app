@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const ChattingMessage = ({ from = "me" }) => {
+const ChattingMessage = ({ from = "me", chatting }) => {
   return (
     <div
       className={`flex items-center ${
@@ -14,7 +14,7 @@ const ChattingMessage = ({ from = "me" }) => {
         height={30}
         style={{ borderRadius: "50%" }}
       />
-      <p className="bg-gray-200 rounded-md ml-2 px-3 py-2 ">채팅내용 입니다</p>
+      <p className="bg-gray-200 rounded-md ml-2 px-3 py-2 ">{chatting?.text}</p>
     </div>
   );
 };

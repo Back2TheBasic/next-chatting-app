@@ -1,24 +1,22 @@
 import ChattingProfile from "../chatting-profile/ChattingProfile";
 import { useDispatch } from "react-redux";
-import {
-  selectProfile,
-  selectSelectedProfile,
-} from "@/redux/slice/chattingSlice";
+import { selectProfile } from "@/redux/slice/chattingSlice";
 import { useEffect } from "react";
+import { auth } from "@/firebase/firebase";
 
 interface IUser {
-  id: number;
+  uid: string;
   name: string;
 }
 
 const ChattingSidebar = () => {
   const dispatch = useDispatch();
-
   const users: IUser[] = [
-    { id: 1, name: "소윤" },
-    { id: 2, name: "소윤2" },
-    { id: 3, name: "소윤3" },
-  ];
+    { uid: "bfQKgX23yeesIE5YMw2U9D6cdaI2", name: "test" },
+    { uid: "szHPjUb87cfy34otYhaX8hGBBJg2", name: "test1" },
+    { uid: "6MP4Poawb9UDALVpFmRA2FrSRoU2", name: "sytkfkd96" },
+    { uid: "9OMuqLUkRENmBkpaPtrqcgIJoWp2", name: "test4" },
+  ].filter((user) => user.uid !== auth?.currentUser?.uid);
 
   useEffect(() => {
     dispatch(selectProfile(users[0]));
@@ -33,7 +31,7 @@ const ChattingSidebar = () => {
       {users.map((user) => {
         return (
           <ChattingProfile
-            key={user.id}
+            key={user.uid}
             onClick={() => handleUserSelect(user)}
             name={user.name}
           />

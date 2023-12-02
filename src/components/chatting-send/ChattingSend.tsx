@@ -1,5 +1,5 @@
 import { auth, db } from "@/firebase/firebase";
-import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { useState } from "react";
 import Input from "../input/Input";
 import { useSelector } from "react-redux";
@@ -21,12 +21,17 @@ const ChattingSend = () => {
       return;
     }
 
-    await setDoc(doc(collection(db, "messages")), {
+    const newMessage = {
       text: message,
       createdAt: Timestamp.now().toDate(),
-      name: selectedUser.name,
-      userId: selectedUser.id,
-    });
+      fromName: auth.currentUser?.displayName,
+      fromUid: auth.currentUser?.uid,
+      toName: selectedUser.name,
+      toUid: selectedUser.uid,
+    };
+    setMessage("");
+
+    await addDoc(collection(db, "messages"), newMessage);
   };
 
   return (
@@ -35,6 +40,7 @@ const ChattingSend = () => {
         id="chatting"
         placeholder="메시지를 입력하세요"
         onChange={changeChattingMessage}
+        value={message}
       />
       <button type="submit" className="w-12">
         전송

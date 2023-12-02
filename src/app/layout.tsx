@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import ToastProvider from "@/components/toast/ToastProvider";
 import "./globals.css";
-// import Header from "@/layouts/header/Header";
 import NavigationEvents from "@/components/navigation/NavigationEvents";
 import Loader from "@/components/loader/Loader";
 import Provider from "@/redux/provider";

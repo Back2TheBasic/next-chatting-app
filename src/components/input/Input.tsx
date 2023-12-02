@@ -5,6 +5,7 @@ import styles from "./Input.module.scss";
 const Input = ({
   id = "",
   type = "text",
+  value = "",
   label = "",
   placeholder = "",
   autoComplete = "",
@@ -35,6 +36,7 @@ const Input = ({
           type={checkType()}
           name={id}
           id={id}
+          value={value}
           placeholder={placeholder}
           onChange={onChange}
           autoComplete={autoComplete}
