@@ -1,7 +1,18 @@
+// Import the functions you need from the SDKs you need
+"use client";
+
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,7 +31,30 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
-const db = getFirestore();
+const db = getFirestore(app);
 const auth = getAuth(app);
+const updateUserDB = (user: any) => {
+  setDoc(doc(db, "users", user.email), {
+    email: user?.email,
+    lastActive: Date.now(),
+    photoURL: user?.photoURL
+      ? user?.photoURL
+      : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FtEMUl%2FbtrDc6957nj%2FNwJoDw0EOapJNDSNRNZK8K%2Fimg.jpg",
+    displayName: user?.displayName
+      ? user?.displayName
+      : user?.email.split("@")[0],
+    uid: user?.uid,
+  });
+};
 
-export { db, auth, app };
+const getUserDB = async (currentEmail: string) => {
+  const usersCollection = collection(db, "users");
+  const userSnapshots = await getDocs(usersCollection);
+
+  const otherUsersEmails = userSnapshots.docs
+    .map((doc) => doc.data())
+    .filter((user) => user.email !== currentEmail);
+
+  return otherUsersEmails;
+};
+export { db, auth, app, updateUserDB, getUserDB };

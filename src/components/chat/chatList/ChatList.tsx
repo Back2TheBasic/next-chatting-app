@@ -5,7 +5,7 @@ import MessageInput from "@/components/chat/messageInput/MessageInput";
 
 const ChatList = () => {
   return (
-    <div>
+    <div className="min-h-[100vh] max-h-[100vh] overflow-hidden">
       <ChatHeader />
       <MessageList />
       <MessageInput />

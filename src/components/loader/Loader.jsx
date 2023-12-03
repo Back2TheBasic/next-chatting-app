@@ -3,15 +3,15 @@
 import React from "react";
 import styles from "./Loader.module.scss";
 import { RotatingLines } from "react-loader-spinner";
-import { selectIsLoading } from "@/redux/slice/loadingSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { auth } from "@/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Loader = () => {
-  const isLoading = useSelector(selectIsLoading);
+  const [user, loading] = useAuthState(auth);
 
   return (
     <div>
-      {isLoading && (
+      {loading && (
         <div className={styles.wrapper}>
           <div className={styles.loader}>
             <RotatingLines
