@@ -1,25 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
-import ChattingMessage from "../chatting-message/ChattingMessage";
-import ChattingSend from "../chatting-send/ChattingSend";
-import {
-  getChattingList,
-  selectChattingList,
-  selectSelectedProfile,
-} from "@/redux/slice/chattingSlice";
-import useFetchDocuments from "@/hooks/useFetchDocuments";
-import { useEffect } from "react";
+import { useSelector } from 'react-redux';
+import ChattingMessage from '../chatting-message/ChattingMessage';
+import ChattingSend from '../chatting-send/ChattingSend';
+import { selectSelectedProfile } from '@/redux/slice/chattingSlice';
+import useFetchDocuments from '@/hooks/useFetchDocuments';
 
 const Chatting = () => {
-  const dispatch = useDispatch();
-
   const { documents: chattingList } = useFetchDocuments();
   const selectedUser = useSelector(selectSelectedProfile);
 
-  useEffect(() => {
-    dispatch(getChattingList(chattingList));
-  }, [chattingList, dispatch]);
-
-  const storeChattingList = useSelector(selectChattingList)?.filter(
+  const storeChattingList = chattingList?.filter(
     (chatting) =>
       chatting.toUid === selectedUser.uid ||
       chatting.fromUid === selectedUser.uid
@@ -33,7 +22,7 @@ const Chatting = () => {
             <ChattingMessage
               key={chatting.id}
               chatting={chatting}
-              from={chatting.toUid === selectedUser.uid ? "me" : "others"}
+              from={chatting.toUid === selectedUser.uid ? 'me' : 'others'}
             />
           ))}
         </article>
