@@ -1,10 +1,16 @@
-import Image from "next/image";
+import { IMessage } from '@/types/chatting';
+import Image from 'next/image';
 
-const ChattingMessage = ({ from = "me", chatting }) => {
+interface IChattingMessageProps {
+  from: string;
+  message: IMessage;
+}
+
+const ChattingMessage = ({ from = 'me', message }: IChattingMessageProps) => {
   return (
     <div
       className={`flex items-center ${
-        from === "me" ? "justify-end" : "justify-start"
+        from === 'me' ? 'justify-end' : 'justify-start'
       }`}
     >
       <Image
@@ -12,9 +18,9 @@ const ChattingMessage = ({ from = "me", chatting }) => {
         alt="profile image"
         width={30}
         height={30}
-        style={{ borderRadius: "50%" }}
+        style={{ borderRadius: '50%' }}
       />
-      <p className="bg-gray-200 rounded-md ml-2 px-3 py-2 ">{chatting?.text}</p>
+      <p className="bg-gray-200 rounded-md ml-2 px-3 py-2 ">{message?.text}</p>
     </div>
   );
 };
