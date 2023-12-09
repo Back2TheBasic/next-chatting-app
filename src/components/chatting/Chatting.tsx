@@ -7,7 +7,6 @@ import { IMessage } from '@/types/chatting';
 
 const Chatting = () => {
   const { documents: messageList } = useFetchDocuments();
-  console.log(messageList[0]);
   const selectedUser = useSelector(selectSelectedProfile);
 
   const storeMessageList = messageList.filter(
