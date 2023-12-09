@@ -15,7 +15,7 @@ const Chatting = () => {
   );
 
   return (
-    <section className="px-2 py-4 h-full grid grid-rows-6">
+    <section className="px-2 py-4 h-full flex flex-col justify-between">
       <div className="row-span-5">
         <article>
           {storeMessageList?.map((message: IMessage) => (

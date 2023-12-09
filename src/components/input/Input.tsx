@@ -1,23 +1,23 @@
-import { useState } from "react";
-import Icon from "../icon/Icon";
-import styles from "./Input.module.scss";
+import { useState } from 'react';
+import Icon from '../icon/Icon';
+import styles from './Input.module.scss';
 
 const Input = ({
-  id = "",
-  type = "text",
-  value = "",
-  label = "",
-  placeholder = "",
-  autoComplete = "",
+  id = '',
+  type = 'text',
+  value = '',
+  label = '',
+  placeholder = '',
+  autoComplete = '',
   onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {},
   required = false,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const checkType = (): string => {
-    if (type === "email") return "email";
-    if (type === "password") return showPassword ? "text" : "password";
-    return "text";
+    if (type === 'email') return 'email';
+    if (type === 'password') return showPassword ? 'text' : 'password';
+    return 'text';
   };
   const togglePasswordShow = () => {
     setShowPassword(!showPassword);
@@ -41,12 +41,12 @@ const Input = ({
           onChange={onChange}
           autoComplete={autoComplete}
           required={required}
-          className={styles.input}
+          className={`${styles.input} m-0`}
         />
 
-        {type === "password" && (
+        {type === 'password' && (
           <button type="button" onClick={togglePasswordShow}>
-            <Icon type={showPassword ? "show" : "hide"} />
+            <Icon type={showPassword ? 'show' : 'hide'} />
           </button>
         )}
       </div>

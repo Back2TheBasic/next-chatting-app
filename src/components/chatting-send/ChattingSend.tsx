@@ -35,7 +35,7 @@ const ChattingSend = () => {
   };
 
   return (
-    <form className="flex" onSubmit={handleSendMessage}>
+    <form className="flex mt-3" onSubmit={handleSendMessage}>
       <Input
         id="chatting"
         placeholder="메시지를 입력하세요"

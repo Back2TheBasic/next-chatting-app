@@ -9,7 +9,7 @@ interface IChattingMessageProps {
 const ChattingMessage = ({ from = 'me', message }: IChattingMessageProps) => {
   return (
     <div
-      className={`flex items-center ${
+      className={`flex items-center mb-2 ${
         from === 'me' ? 'justify-end' : 'justify-start'
       }`}
     >
