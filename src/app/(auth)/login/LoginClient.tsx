@@ -7,7 +7,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  GithubAuthProvider,
 } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -18,8 +17,8 @@ const LoginClient = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const redirectChatPage = () => {
-    router.push("/chat");
+  const redirectHomePage = () => {
+    router.push("/");
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +35,7 @@ const LoginClient = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         toast.success("로그인에 성공했습니다.");
-        redirectChatPage();
+        redirectHomePage();
       })
       .catch((error) => {
         toast.error(error.message);
@@ -48,7 +47,7 @@ const LoginClient = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         toast.success("로그인에 성공했습니다.");
-        redirectChatPage();
+        redirectHomePage();
       })
       .catch((error) => {
         toast.error(error.message);

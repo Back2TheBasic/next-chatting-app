@@ -1,8 +1,13 @@
 import { atom, selector } from "recoil";
 
-export const authInfoState = atom({
+export interface AuthInfo {
+  email: string;
+  nickname: string;
+}
+
+export const authInfoState = atom<AuthInfo>({
   key: "auth",
-  default: { email: "" },
+  default: { email: "", nickname: "" },
 });
 
 const isLogin = selector({

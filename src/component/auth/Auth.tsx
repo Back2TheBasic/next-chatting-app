@@ -12,11 +12,15 @@ interface AuthProps {
 const Auth = ({ children }: AuthProps) => {
   const [authInfo, setAuthInfo] = useRecoilState(authInfoState);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     setIsLoading(true);
     auth.onAuthStateChanged((user) => {
-      setAuthInfo((prev) => ({ ...prev, email: user?.email || "" }));
+      setAuthInfo((prev) => ({
+        ...prev,
+        nickname: user?.displayName || "",
+        email: user?.email || "",
+      }));
       setIsLoading(false);
     });
   }, [setAuthInfo, setIsLoading]);
