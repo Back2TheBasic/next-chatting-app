@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { IUser } from '@/types/user';
 
 const chattingSlice = createSlice({
   name: 'chatting',
   initialState: {
-    selectedProfile: {},
+    selectedProfile: {} as IUser,
   },
   reducers: {
     selectProfile(state, action) {
@@ -13,5 +15,6 @@ const chattingSlice = createSlice({
 });
 
 export const { selectProfile } = chattingSlice.actions;
-export const selectSelectedProfile = (state) => state.chatting.selectedProfile;
+export const selectSelectedProfile = (state: RootState) =>
+  state.chatting.selectedProfile;
 export default chattingSlice.reducer;
