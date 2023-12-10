@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 
-import styles from "./chat.module.scss";
-import Profile from "../../app/chat/[id]/Profile";
+import styles from "./sidebar.module.scss";
 import { signOut } from "firebase/auth";
 import { auth, db } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
@@ -10,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { DocumentData, collection } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Profile from "../profile/Profile";
 
 const Sidebar = () => {
   const [my] = useAuthState(auth);
@@ -36,8 +36,9 @@ const Sidebar = () => {
   };
 
   // 실시간데이터베이스 id찾아보기
-  const makeChatId = (myId: string, opId: string) =>
-    `${[myId.slice(0, 5), opId.slice(0, 5)].sort()}`;
+  const makeChatId = (myEmail: string, opEmail: string) => {
+    return [myEmail.split("@")[0], opEmail.split("@")[0]].sort().join("&");
+  };
 
   return (
     <aside className={styles.sidebar}>
@@ -50,11 +51,12 @@ const Sidebar = () => {
           <div
             key={user.id}
             className={styles.sidebar_profileCard}
-            onClick={() =>
-              onClick(makeChatId(my?.displayName || "", user.displayName))
-            }
+            onClick={() => onClick(makeChatId(my?.email || "", user.email))}
           >
-            <Profile profileSrc={user.photoURL} nickname={user.displayName} />
+            <Profile
+              profileSrc={user.photoURL}
+              nickname={user.displayName || user.email}
+            />
           </div>
         ))}
       </div>

@@ -1,18 +1,7 @@
-import { atom, selector } from "recoil";
+import { AuthInfoStore } from "@/types";
+import { atom } from "recoil";
 
-export interface AuthInfo {
-  email: string;
-  nickname: string;
-}
-
-export const authInfoState = atom<AuthInfo>({
+export const authStore = atom<AuthInfoStore>({
   key: "auth",
-  default: { email: "", nickname: "" },
-});
-
-const isLogin = selector({
-  key: "isLogin",
-  get: ({ get }) => {
-    return !!get(authInfoState).email;
-  },
+  default: { email: "", nickname: "", profile_image: "" },
 });

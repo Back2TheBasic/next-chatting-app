@@ -4,30 +4,6 @@
   width: 100vw;
 }
 
-.sidebar {
-  flex: 1;
-  border-right: 1px solid rgba(128, 128, 128, 0.305);
-
-  &_header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.305);
-    height: 48px;
-  }
-
-  &_list {
-    padding: 12px;
-  }
-
-  &_profileCard {
-    border: 1px solid rgba(128, 128, 128, 0.305);
-    padding: 8px;
-    border-radius: 4px;
-  }
-}
-
 .chatroom {
   flex: 3;
   display: flex;
@@ -35,7 +11,6 @@
   justify-content: space-between;
 
   &_header {
-    position: absolute;
     display: flex;
     padding: 12px;
     gap: 8px;
@@ -71,54 +46,5 @@
       width: 40px;
       height: 32px;
     }
-  }
-}
-
-.chatMessage {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-
-  .bubble {
-    position: relative;
-    background: rgba(128, 128, 128, 0.229);
-    border-radius: 4px;
-    padding: 4px 12px;
-
-    &:after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 0;
-      height: 0;
-      border: 10px solid transparent;
-      border-right-color: rgba(128, 128, 128, 0.229);
-      border-left: 0;
-      border-bottom: 0;
-      margin-top: -5px;
-      margin-left: -10px;
-    }
-  }
-}
-
-.chatMessage_isMe {
-  justify-content: end;
-
-  img {
-    display: none;
-  }
-
-  .bubble:after {
-    border-right-color: transparent;
-  }
-}
-
-.profile {
-  display: flex;
-  gap: 8px;
-
-  &_image {
-    border-radius: 50%;
   }
 }

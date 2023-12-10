@@ -4,12 +4,12 @@ import styles from "../Layout.module.scss";
 import { toast } from "react-toastify";
 import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
-import { authInfoState } from "@/states/auth";
+import { authStore } from "@/states/auth";
 import { useRecoilValue } from "recoil";
 
 const Header = () => {
   const router = useRouter();
-  const isLogin = !!useRecoilValue(authInfoState).email;
+  const isLogin = !!useRecoilValue(authStore).email;
 
   const onClickLogout = () => {
     signOut(auth)

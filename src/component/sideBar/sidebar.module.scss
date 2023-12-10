@@ -1,0 +1,26 @@
+.sidebar {
+  flex: 1;
+  border-right: 1px solid rgba(128, 128, 128, 0.305);
+
+  &_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.305);
+    height: 48px;
+  }
+
+  &_list {
+    display: flex;
+    padding: 12px;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &_profileCard {
+    border: 1px solid rgba(128, 128, 128, 0.305);
+    padding: 8px;
+    border-radius: 4px;
+  }
+}

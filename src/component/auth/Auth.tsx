@@ -1,31 +1,53 @@
 "use client";
-import { auth } from "@/firebase/firebase";
-import { authInfoState } from "@/states/auth";
+import { auth, db } from "@/firebase/firebase";
+import { authStore } from "@/states/auth";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import ScreenLoader from "../loading/screenLoader/ScreenLoader";
+import { useAuthState } from "react-firebase-hooks/auth";
+import LoginPage from "@/app/(auth)/login/page";
+import { doc, setDoc } from "firebase/firestore";
+import { serverTimestamp } from "firebase/database";
 
 interface AuthProps {
   children: React.ReactNode;
 }
 
 const Auth = ({ children }: AuthProps) => {
-  const [authInfo, setAuthInfo] = useRecoilState(authInfoState);
-  const [isLoading, setIsLoading] = useState(true);
+  const [authInfo, setAuthInfo] = useRecoilState(authStore);
+  const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    setIsLoading(true);
-    auth.onAuthStateChanged((user) => {
+    if (user) {
+      setDoc(
+        doc(db, "users", user.uid),
+        {
+          email: user.email,
+          lastActive: serverTimestamp(),
+          photoURL: user.photoURL,
+          displayName: user.displayName,
+        },
+        { merge: true }
+      );
+
       setAuthInfo((prev) => ({
         ...prev,
         nickname: user?.displayName || "",
         email: user?.email || "",
+        profile_image: user?.photoURL || "",
       }));
-      setIsLoading(false);
-    });
-  }, [setAuthInfo, setIsLoading]);
+    }
+  }, [user, setAuthInfo]);
 
-  return <>{isLoading ? <ScreenLoader /> : children}</>;
+  if (loading) {
+    return <ScreenLoader />;
+  }
+
+  if (!user) {
+    return <LoginPage />;
+  }
+
+  return <>{children}</>;
 };
 
 export default Auth;
