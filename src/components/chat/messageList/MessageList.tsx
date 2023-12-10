@@ -2,61 +2,17 @@
 
 import MyMessage from "./MyMessage";
 import YourMessage from "./YourMessage";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  query,
-  collection,
-  orderBy,
-  onSnapshot,
-  limit,
-} from "firebase/firestore";
-import { auth, db } from "@/firebase";
+import React, { useEffect } from "react";
+import { auth } from "@/firebase";
+import useScrollToBottom from "@/hooks/useScrollToBottom";
+import useFetchMessages from "@/hooks/useFetchMessages";
 
-type MessageProps = {
-  uid: string;
-  text: string;
-  name: string;
-  createdAt: any;
-  id?: string;
-  photoURL?: string;
-};
 const MessageList = () => {
-  const [messages, setMessages] = useState<MessageProps[]>([]);
   const uid = auth?.currentUser?.uid || "이름없음";
-  const scrollContainerRef = useRef<null | HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop =
-        scrollContainerRef.current.scrollHeight;
-    }
-  };
+  const { scrollContainerRef, scrollToBottom } = useScrollToBottom();
+  const messages = useFetchMessages();
 
   useEffect(() => {
-    const q = query(
-      collection(db, "messages"),
-      orderBy("createdAt", "desc"),
-      limit(50)
-    );
-
-    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-      const fetchedMessages: MessageProps[] = [];
-      QuerySnapshot.forEach((doc) => {
-        const data = doc.data() as MessageProps;
-        fetchedMessages.push({ ...data, id: doc.id });
-      });
-      const sortedMessages = fetchedMessages.sort(
-        (a, b) => a.createdAt - b.createdAt
-      );
-      setMessages(sortedMessages);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  useLayoutEffect(() => {
     scrollToBottom();
   }, [messages]);
 
