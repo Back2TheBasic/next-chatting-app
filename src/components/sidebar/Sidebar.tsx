@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import SidebarHeader from "./sidebarHeader/SidebarHeader";
 import UserCard from "./userCard/UserCard";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, getUserDB } from "@/firebase";
+import { auth, getChatId, getUserDB } from "@/firebase";
 import { DocumentData } from "firebase/firestore";
-
-const Sidebar = () => {
+interface ISidebarProps {
+  onClick: (friend: string) => void;
+}
+const Sidebar = ({ onClick }: ISidebarProps) => {
   const [user] = useAuthState(auth);
   const [friends, setFriends] = useState<DocumentData[]>([]);
+
   useEffect(() => {
     const fetchUserDB = async () => {
       if (user?.email) {
@@ -20,6 +23,7 @@ const Sidebar = () => {
 
     fetchUserDB();
   }, [user?.email]);
+
   return (
     <div className="w-64">
       <SidebarHeader />
@@ -28,6 +32,7 @@ const Sidebar = () => {
           key={`${user.email}-${index}`}
           photoURL={user.photoURL}
           displayName={user.displayName}
+          onClick={() => onClick(user.email)}
         />
       ))}
     </div>

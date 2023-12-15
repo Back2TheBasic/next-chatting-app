@@ -4,12 +4,15 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {
+  addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   getFirestore,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
@@ -33,8 +36,10 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+const currentUser = auth.currentUser;
 const updateUserDB = (user: any) => {
-  setDoc(doc(db, "users", user.email), {
+  updateDoc(doc(db, "users", user.email), {
     email: user?.email,
     lastActive: Date.now(),
     photoURL: user?.photoURL
@@ -47,6 +52,31 @@ const updateUserDB = (user: any) => {
   });
 };
 
+const createUserDB = (user: any) => {
+  setDoc(doc(db, "users", user.email), {
+    email: user?.email,
+    lastActive: Date.now(),
+    photoURL: user?.photoURL
+      ? user?.photoURL
+      : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FtEMUl%2FbtrDc6957nj%2FNwJoDw0EOapJNDSNRNZK8K%2Fimg.jpg",
+    displayName: user?.displayName
+      ? user?.displayName
+      : user?.email.split("@")[0],
+    uid: user?.uid,
+    chats: {},
+  });
+};
+
+const createOrUpdateDB = async (user: any) => {
+  const usersCollection = doc(db, "users", user.email);
+  const userSnapshots = await getDoc(usersCollection);
+  if (userSnapshots.exists()) {
+    updateUserDB(user);
+  } else {
+    createUserDB(user);
+  }
+};
+
 const getUserDB = async (currentEmail: string) => {
   const usersCollection = collection(db, "users");
   const userSnapshots = await getDocs(usersCollection);
@@ -57,4 +87,73 @@ const getUserDB = async (currentEmail: string) => {
 
   return otherUsersEmails;
 };
-export { db, auth, app, updateUserDB, getUserDB };
+
+const createOrUpdateUserChats = async (friendUid: string, newId: string) => {
+  const currentUserEmail = currentUser?.email!;
+  const usersCollection = doc(db, "users", currentUserEmail);
+  const userSnapshots = await getDoc(usersCollection);
+  const chats = userSnapshots.data()?.chats || {};
+  if (chats) {
+    updateUserChats(friendUid, newId);
+  } else {
+    createUserChats(friendUid, newId);
+  }
+};
+
+const createUserChats = async (friendUid: string, newId: string) => {
+  const currentUserEmail = currentUser?.email!;
+  const currentUserDB = doc(db, "users", currentUserEmail);
+  const currentUserSnapshot = await getDoc(currentUserDB);
+  const prevChat = currentUserSnapshot.data()?.chats || {};
+
+  updateDoc(doc(db, "users", currentUserEmail), {
+    chats: {
+      ...prevChat,
+      [friendUid]: newId,
+    },
+  });
+};
+
+const updateUserChats = async (friendUid: string, newId: string) => {
+  const currentUserEmail = currentUser?.email!;
+  const currentUserDB = doc(db, "users", currentUserEmail);
+  const currentUserSnapshot = await getDoc(currentUserDB);
+  const prevChat = currentUserSnapshot.data()?.chats || {};
+  updateDoc(doc(db, "users", currentUserEmail), {
+    chats: {
+      ...prevChat,
+      [friendUid]: newId,
+    },
+  });
+};
+
+const createChatId = async (friendUid: string, myUid: string) => {
+  const chatCollection = collection(db, "chats");
+
+  const newData = await addDoc(chatCollection, {
+    createAt: Date.now(),
+    users: [friendUid, myUid],
+  });
+  updateUserChats(friendUid, newData.id);
+  return newData.id;
+};
+
+const getChatId = async (
+  myEmail: string,
+  myUid: string,
+  friendEmail: string
+) => {
+  const friendDB = doc(db, "users", friendEmail);
+  const friendSnapshots = await getDoc(friendDB);
+  const friendUid = await friendSnapshots.data()?.uid;
+  const currentUserDB = doc(db, "users", myEmail);
+  const currentUserSnapshots = await getDoc(currentUserDB);
+  const chatId = await currentUserSnapshots.data()?.chats[friendUid];
+
+  if (!chatId) {
+    return createChatId(friendUid, myUid);
+  }
+
+  return chatId;
+};
+export { db, auth, app, updateUserDB, getUserDB, getChatId, createOrUpdateDB };

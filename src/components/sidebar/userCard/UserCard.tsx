@@ -5,11 +5,12 @@ import Image from "next/image";
 interface UserCardProps {
   photoURL: string;
   displayName: string;
+  onClick?: () => void;
 }
 
-const UserCard = ({ photoURL, displayName }: UserCardProps) => {
+const UserCard = ({ photoURL, displayName, onClick }: UserCardProps) => {
   return (
-    <div>
+    <div onClick={onClick}>
       <div className="flex items-center space-x-4 p-2 m-4 border border-gray-200 hover:bg-gray-200 rounded cursor-pointer">
         <div className="w-8 h-8 rounded-full overflow-hidden m-2">
           <Image
