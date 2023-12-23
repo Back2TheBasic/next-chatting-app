@@ -32,8 +32,6 @@ const AuthRedirect = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("user", user);
-
       createOrUpdateDB(user);
       dispatch(SET_ACTIVE_USER(user));
     }
