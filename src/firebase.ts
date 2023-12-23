@@ -154,6 +154,9 @@ const getChatId = async (
   const currentUserSnapshots = await getDoc(currentUserDB);
   const myChatId = await currentUserSnapshots.data()?.chats[friendUid];
   const friendChatId = await friendSnapshots.data()?.chats[myUid];
+  if (myChatId) {
+    return myChatId;
+  }
   if (friendChatId) {
     updateUserChats(friendUid, friendChatId);
     return friendChatId;
