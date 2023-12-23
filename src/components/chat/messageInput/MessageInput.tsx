@@ -1,29 +1,27 @@
 import React, { useState } from "react";
 import { auth, db } from "@/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { set } from "firebase/database";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { useParams } from "next/navigation";
 
 const MessageInput = () => {
   // 메시지 전송 로직을 여기에 추가합니다.
   const [message, setMessage] = useState("");
-
+  const params = useParams();
   const sendMessage = async (event: any) => {
     event.preventDefault();
     console.log("message", message);
 
-    if (message.trim() === "") {
-      alert("Enter valid message");
-      return;
-    }
     const uid = auth?.currentUser?.uid || "";
     const displayName = auth?.currentUser?.displayName || "이름없음";
 
-    await addDoc(collection(db, "messages"), {
-      text: message,
-      name: displayName,
-      createdAt: Date.now(),
-      uid,
-      photoURL: auth?.currentUser?.photoURL,
+    await updateDoc(doc(db, "chats", params.id as string), {
+      messages: arrayUnion({
+        text: message,
+        name: displayName,
+        createdAt: Date.now(),
+        uid,
+        photoURL: auth?.currentUser?.photoURL,
+      }),
     });
     setMessage("");
   };

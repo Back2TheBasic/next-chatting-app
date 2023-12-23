@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  collection,
-  query,
-  orderBy,
-  limit,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase";
 
 type MessageProps = {
@@ -17,28 +11,19 @@ type MessageProps = {
   photoURL?: string;
 };
 
-const useFetchMessages = () => {
+const useFetchMessages = (params: string) => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
-
   useEffect(() => {
-    const q = query(
-      collection(db, "messages"),
-      orderBy("createdAt", "desc"),
-      limit(50)
-    );
+    const docRef = doc(db, "chats", params as string);
 
-    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-      const fetchedMessages: MessageProps[] = [];
-      QuerySnapshot.forEach((doc) => {
-        const data = doc.data() as MessageProps;
-        fetchedMessages.push({ ...data, id: doc.id });
-      });
-      const sortedMessages = fetchedMessages.sort(
-        (a, b) => a.createdAt - b.createdAt
-      );
-      setMessages(sortedMessages);
+    const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        const messagesArray = data.messages || [];
+
+        setMessages(messagesArray);
+      }
     });
-
     return () => {
       unsubscribe();
     };
