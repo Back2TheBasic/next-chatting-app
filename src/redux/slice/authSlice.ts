@@ -39,8 +39,6 @@ const authSlice = createSlice({
       state.userID = null;
     },
     SET_OTHER_USER: (state, action) => {
-      console.log("action", action.payload);
-
       const { displayName, photoURL, lastActive } = action.payload;
       const koreanTime = new Date(lastActive).toLocaleString("ko-KR", {
         timeZone: "Asia/Seoul",

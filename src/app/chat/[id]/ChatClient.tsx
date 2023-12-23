@@ -24,11 +24,9 @@ const ChatClient = () => {
   const userUid = useSelector(selectUserID);
   const [user] = useAuthState(auth);
   const navToChatRoom = async (friend: string) => {
-    createOrUpdateDB(user, friend);
     if (!userEmail || !userUid) {
       throw new Error("User email or user UID is null");
     }
-    console.log("friend", friend);
 
     const chatId = await getChatId(userEmail, userUid, friend);
     router.push(`/chat/${chatId}`);

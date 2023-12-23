@@ -97,6 +97,8 @@ const createOrUpdateUserChats = async (friendUid: string, newId: string) => {
   const usersCollection = doc(db, "users", currentUserEmail);
   const userSnapshots = await getDoc(usersCollection);
   const chats = userSnapshots.data()?.chats || {};
+  console.log("chats", chats);
+
   if (chats) {
     updateUserChats(friendUid, newId);
   } else {
@@ -110,12 +112,9 @@ const createUserChats = async (friendUid: string, newId: string) => {
   const currentUserSnapshot = await getDoc(currentUserDB);
   const prevChat = currentUserSnapshot.data()?.chats || {};
 
-  updateDoc(doc(db, "users", currentUserEmail), {
-    chats: {
-      ...prevChat,
-      [friendUid]: newId,
-    },
-  });
+  if (!prevChat) {
+    setDoc(doc(db, "users", currentUserEmail), { chats: {} }, { merge: true });
+  }
 };
 
 const updateUserChats = async (friendUid: string, newId: string) => {
@@ -152,8 +151,10 @@ const getChatId = async (
   const friendUid = await friendSnapshots.data()?.uid;
   const currentUserDB = doc(db, "users", myEmail);
   const currentUserSnapshots = await getDoc(currentUserDB);
-  const myChatId = await currentUserSnapshots.data()?.chats[friendUid];
-  const friendChatId = await friendSnapshots.data()?.chats[myUid];
+  const myChatId = await currentUserSnapshots.data()?.chats?.[friendUid];
+  const friendChatId = await friendSnapshots.data()?.chats?.[myUid];
+  console.log("1", myChatId, friendChatId);
+
   if (myChatId) {
     return myChatId;
   }

@@ -39,12 +39,12 @@ const MessageList = () => {
       ref={scrollContainerRef}
       className="flex flex-col space-y-2 p-4 overflow-y-auto min-h-[85vh] max-h-[85vh]"
     >
-      {messages.map((message) =>
+      {messages.map((message, index) =>
         message.uid === uid ? (
-          <MyMessage key={message.id} content={message.text} />
+          <MyMessage key={`${message.id}${index}`} content={message.text} />
         ) : (
           <YourMessage
-            key={message.id}
+            key={`${message.id}${index}`}
             content={message.text}
             photoURL={message?.photoURL}
           />

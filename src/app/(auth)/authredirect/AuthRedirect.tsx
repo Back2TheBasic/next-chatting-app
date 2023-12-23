@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { auth } from "@/firebase";
-import { use, useEffect } from "react";
+import { auth, createOrUpdateDB } from "@/firebase";
+import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch } from "react-redux";
@@ -32,6 +32,9 @@ const AuthRedirect = () => {
 
   useEffect(() => {
     if (user) {
+      console.log("user", user);
+
+      createOrUpdateDB(user);
       dispatch(SET_ACTIVE_USER(user));
     }
   }, [user]);
