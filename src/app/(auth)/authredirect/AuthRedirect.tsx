@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { auth, createOrUpdateDB } from "@/firebase";
+import { auth } from "@/firebase";
 import { use, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -16,6 +16,7 @@ const AuthRedirect = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("로그인 중입니당~");
+        // router.push("/chat/main");
       } else if (
         pathname !== "/signin" &&
         pathname !== "/signup" &&
@@ -31,7 +32,6 @@ const AuthRedirect = () => {
 
   useEffect(() => {
     if (user) {
-      createOrUpdateDB(user);
       dispatch(SET_ACTIVE_USER(user));
     }
   }, [user]);

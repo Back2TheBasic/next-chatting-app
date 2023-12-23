@@ -20,7 +20,7 @@ const SignInClient = () => {
   const dispatch = useDispatch();
   const signInSuccess = () => {
     dispatch(SET_LOADING(false));
-    router.push("/chat");
+    router.push("/chat/main");
   };
 
   const signInError = (error: any) => {

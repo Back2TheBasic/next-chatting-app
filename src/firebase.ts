@@ -53,18 +53,22 @@ const updateUserDB = (user: any) => {
 };
 
 const createUserDB = (user: any) => {
-  setDoc(doc(db, "users", user.email), {
-    email: user?.email,
-    lastActive: Date.now(),
-    photoURL: user?.photoURL
-      ? user?.photoURL
-      : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FtEMUl%2FbtrDc6957nj%2FNwJoDw0EOapJNDSNRNZK8K%2Fimg.jpg",
-    displayName: user?.displayName
-      ? user?.displayName
-      : user?.email.split("@")[0],
-    uid: user?.uid,
-    chats: {},
-  });
+  setDoc(
+    doc(db, "users", user.email),
+    {
+      email: user?.email,
+      lastActive: Date.now(),
+      photoURL: user?.photoURL
+        ? user?.photoURL
+        : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FtEMUl%2FbtrDc6957nj%2FNwJoDw0EOapJNDSNRNZK8K%2Fimg.jpg",
+      displayName: user?.displayName
+        ? user?.displayName
+        : user?.email.split("@")[0],
+      uid: user?.uid,
+      chats: {},
+    },
+    { merge: true }
+  );
 };
 
 const createOrUpdateDB = async (user: any) => {
@@ -148,12 +152,30 @@ const getChatId = async (
   const friendUid = await friendSnapshots.data()?.uid;
   const currentUserDB = doc(db, "users", myEmail);
   const currentUserSnapshots = await getDoc(currentUserDB);
-  const chatId = await currentUserSnapshots.data()?.chats[friendUid];
-
-  if (!chatId) {
+  const myChatId = await currentUserSnapshots.data()?.chats[friendUid];
+  const friendChatId = await friendSnapshots.data()?.chats[myUid];
+  if (friendChatId) {
+    updateUserChats(friendUid, friendChatId);
+    return friendChatId;
+  }
+  if (!myChatId && !friendChatId) {
     return createChatId(friendUid, myUid);
   }
-
-  return chatId;
 };
-export { db, auth, app, updateUserDB, getUserDB, getChatId, createOrUpdateDB };
+
+const getUserInfo = async (email: string) => {
+  const userDB = doc(db, "users", email);
+  const userSnapshots = await getDoc(userDB);
+  const userInfo = userSnapshots.data();
+  return userInfo;
+};
+export {
+  db,
+  auth,
+  app,
+  updateUserDB,
+  getUserDB,
+  getChatId,
+  createOrUpdateDB,
+  getUserInfo,
+};

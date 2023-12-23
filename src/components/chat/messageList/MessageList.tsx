@@ -3,18 +3,36 @@
 import MyMessage from "./MyMessage";
 import YourMessage from "./YourMessage";
 import React, { useEffect } from "react";
-import { auth } from "@/firebase";
 import useScrollToBottom from "@/hooks/useScrollToBottom";
 import useFetchMessages from "@/hooks/useFetchMessages";
 
+import {
+  query,
+  collection,
+  orderBy,
+  onSnapshot,
+  limit,
+  doc,
+} from "firebase/firestore";
+import { auth, db } from "@/firebase";
+import { useParams } from "next/navigation";
+type MessageProps = {
+  uid: string;
+  text: string;
+  name: string;
+  createdAt: any;
+  id?: string;
+  photoURL?: string;
+};
 const MessageList = () => {
   const uid = auth?.currentUser?.uid || "이름없음";
+  const params = useParams();
   const { scrollContainerRef, scrollToBottom } = useScrollToBottom();
-  const messages = useFetchMessages();
+  const messages = useFetchMessages(params.id as string);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, []);
 
   return (
     <div
