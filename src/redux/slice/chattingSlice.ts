@@ -1,22 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { IUser } from '@/types/user';
 
 const chattingSlice = createSlice({
-  name: "chatting",
+  name: 'chatting',
   initialState: {
-    selectedProfile: {},
-    chattingList: [],
+    selectedProfile: {} as IUser,
   },
   reducers: {
     selectProfile(state, action) {
       state.selectedProfile = action.payload;
     },
-    getChattingList(state, action) {
-      state.chattingList = action.payload;
-    },
   },
 });
 
-export const { selectProfile, getChattingList } = chattingSlice.actions;
-export const selectSelectedProfile = (state) => state.chatting.selectedProfile;
-export const selectChattingList = (state) => state.chatting.chattingList;
+export const { selectProfile } = chattingSlice.actions;
+export const selectSelectedProfile = (state: RootState) =>
+  state.chatting.selectedProfile;
 export default chattingSlice.reducer;

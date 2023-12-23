@@ -1,31 +1,32 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { toast } from "react-toastify";
-import { auth } from "@/firebase/firebase";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
-import Loader from "@/components/loader/Loader";
-import Input from "@/components/input/Input";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { auth } from '@/firebase/firebase';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
+import Loader from '@/components/loader/Loader';
+import Input from '@/components/input/Input';
 
 const LoginClient = () => {
   const router = useRouter();
   const provider = new GoogleAuthProvider();
 
-  const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
+  const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
 
   const changeLoginInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
+    console.log(loginInfo);
   };
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!loginInfo.email || !loginInfo.password) {
-      toast.warning("이메일과 비밀번호를 모두 입력해주세요");
+      toast.warning('이메일과 비밀번호를 모두 입력해주세요');
       return;
     }
 
@@ -33,14 +34,14 @@ const LoginClient = () => {
 
     signInWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
       .then((userCredential) => {
-        toast.success("로그인에 성공했습니다.");
-        router.push("/");
+        toast.success('로그인에 성공했습니다.');
+        router.push('/');
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        console.log("errorCode", errorCode, "errorMessage", errorMessage);
+        console.log('errorCode', errorCode, 'errorMessage', errorMessage);
         toast.error(errorMessage);
       })
       .finally(() => {
@@ -53,15 +54,15 @@ const LoginClient = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         // TODO: 중복되는 함수 처리
-        toast.success("로그인에 성공했습니다.");
-        router.push("/");
+        toast.success('로그인에 성공했습니다.');
+        router.push('/');
       })
       .catch((error) => {
         // TODO: 함수 빼서 간단하게 처리
         // firebase에 오류 기록하는 기능이 있는데 추후 이걸 활용한다면 따로 함수 만들어서!!
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorCode", errorCode, "errorMessage", errorMessage);
+        console.log('errorCode', errorCode, 'errorMessage', errorMessage);
         toast.error(errorMessage);
       })
       .finally(() => {
@@ -90,6 +91,7 @@ const LoginClient = () => {
                 placeholder="이메일을 입력하세요"
                 onChange={changeLoginInfo}
                 autoComplete="email"
+                value={loginInfo.email}
                 required
               />
             </div>
@@ -102,6 +104,7 @@ const LoginClient = () => {
                 placeholder="비밀번호를 입력하세요"
                 onChange={changeLoginInfo}
                 autoComplete="current-password"
+                value={loginInfo.password}
                 required
               />
             </div>

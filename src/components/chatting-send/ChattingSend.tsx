@@ -1,13 +1,13 @@
-import { auth, db } from "@/firebase/firebase";
-import { addDoc, collection, Timestamp } from "firebase/firestore";
-import { useState } from "react";
-import Input from "../input/Input";
-import { useSelector } from "react-redux";
-import { selectSelectedProfile } from "@/redux/slice/chattingSlice";
-import { toast } from "react-toastify";
+import { auth, db } from '@/firebase/firebase';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
+import { useState } from 'react';
+import Input from '../input/Input';
+import { useSelector } from 'react-redux';
+import { selectSelectedProfile } from '@/redux/slice/chattingSlice';
+import { toast } from 'react-toastify';
 
 const ChattingSend = () => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const changeChattingMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
@@ -17,7 +17,7 @@ const ChattingSend = () => {
     e.preventDefault();
 
     if (message.length <= 0) {
-      toast.warn("메시지를 먼저 입력해주세요");
+      toast.warn('메시지를 먼저 입력해주세요');
       return;
     }
 
@@ -29,13 +29,13 @@ const ChattingSend = () => {
       toName: selectedUser.name,
       toUid: selectedUser.uid,
     };
-    setMessage("");
+    setMessage('');
 
-    await addDoc(collection(db, "messages"), newMessage);
+    await addDoc(collection(db, 'messages'), newMessage);
   };
 
   return (
-    <form className="flex" onSubmit={handleSendMessage}>
+    <form className="flex mt-3" onSubmit={handleSendMessage}>
       <Input
         id="chatting"
         placeholder="메시지를 입력하세요"
